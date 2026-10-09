@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f4f7fb" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#071522" media="(prefers-color-scheme: dark)" />
+    <meta name="description" content="Seyqon Tech Solutions turns ideas into practical websites, applications, and custom software with clear scope and thoughtful development." />
+    <title>Seyqon Tech Solutions | Your Ideas. Working Solutions.</title>
+    <script>
+      try {
+        const savedTheme = localStorage.getItem("seyqon-theme");
+        const initialTheme = savedTheme === "light" || savedTheme === "dark"
+          ? savedTheme
+          : (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+        document.documentElement.dataset.theme = initialTheme;
+        document.documentElement.style.colorScheme = initialTheme;
+      } catch {
+        document.documentElement.dataset.theme = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      }
+    </script>
+    <link rel="icon" href="/assets/favicon.ico" sizes="any" />
+    <link rel="icon" href="/assets/favicon-32x32.png" type="image/png" />
+    <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
