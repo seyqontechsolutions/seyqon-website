@@ -1,2 +1,36 @@
 @import "tailwindcss";
 @import "../styles.css" layer(components);
+
+
+/* Slow, hollow 3D loop gives the hero a tactile focal point without a remote model. */
+.hero-art { isolation: isolate; }
+.hero-hollow {
+  position: absolute; z-index: -1; left: 50%; top: 49%; width: min(390px, 86%); aspect-ratio: 1.18;
+  border: 28px solid transparent; border-radius: 48% 52% 43% 57% / 54% 42% 58% 46%;
+  background: linear-gradient(135deg, rgba(105,197,255,.13), rgba(31,113,232,.08)) padding-box, linear-gradient(145deg,#c4f0ff 0%,#5cc6ff 19%,#187ce4 52%,#7a9fff 76%,#d3f6ff 100%) border-box;
+  box-shadow: 0 10px 0 rgba(14,87,174,.68), 0 19px 0 rgba(11,61,132,.4), 0 26px 34px rgba(17,104,206,.22), inset 0 0 22px rgba(209,247,255,.32);
+  transform: translate(-50%,-50%) rotateX(58deg) rotateZ(-28deg); transform-style: preserve-3d;
+  animation: hollow-drift 9s ease-in-out infinite alternate; pointer-events: none;
+}
+.hero-hollow::before,.hero-hollow::after {
+  content:""; position:absolute; inset:-28px; border:28px solid transparent; border-radius:inherit;
+  background:linear-gradient(135deg,rgba(105,197,255,.1),rgba(31,113,232,.05)) padding-box,linear-gradient(145deg,rgba(180,233,255,.8),rgba(34,122,224,.9) 52%,rgba(119,157,255,.9)) border-box;
+}
+.hero-hollow::before { transform:translateZ(-30px); filter:brightness(.66); }
+.hero-hollow::after { transform:translateZ(30px); opacity:.58; }
+.hollow-glint { position:absolute; inset:8px; border-radius:inherit; border-top:2px solid rgba(239,252,255,.72); transform:translateZ(34px); pointer-events:none; }
+:root[data-theme="dark"] .hero-hollow {
+  background:linear-gradient(135deg,rgba(73,158,255,.16),rgba(12,70,160,.11)) padding-box,linear-gradient(145deg,#8ae4ff 0%,#3999ff 24%,#1558c8 57%,#668aff 82%,#b8f5ff 100%) border-box;
+  box-shadow:0 10px 0 rgba(5,42,100,.85),0 19px 0 rgba(2,26,71,.72),0 30px 40px rgba(20,94,229,.3),inset 0 0 24px rgba(169,229,255,.24);
+}
+@keyframes hollow-drift { from { transform:translate(-50%,-52%) rotateX(58deg) rotateZ(-28deg); } to { transform:translate(-50%,-48%) rotateX(58deg) rotateZ(-20deg); } }
+@media(max-width:640px) { .hero-hollow { width:min(330px,84%); border-width:21px; } .hero-hollow::before,.hero-hollow::after { inset:-21px; border-width:21px; } .hollow-glint { transform:translateZ(26px); } }
+@media(prefers-reduced-motion:reduce) { .hero-hollow { animation:none; } }
+
+
+.site-particles { position: fixed; inset: 0; z-index: 0; width: 100%; height: 100%; pointer-events: none; }
+.site-content { position: relative; z-index: 1; }
+
+.random-rock { animation: independent-rock var(--rock-duration, 7s) ease-in-out var(--rock-delay, 0s) infinite alternate; transform-origin: center; will-change: transform; }
+@keyframes independent-rock { from { transform: rotate(var(--rock-left, -4deg)); } to { transform: rotate(var(--rock-right, 4deg)); } }
+@media (prefers-reduced-motion: reduce) { .random-rock { animation: none; } }

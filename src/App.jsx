@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const ENQUIRY_ENDPOINT = ""; // Set a POST endpoint when the enquiry service is ready.
 
@@ -86,12 +86,108 @@ function Header({ theme, themeMode, onToggleTheme, onUseSystemTheme }) {
   );
 }
 
+function HeroParticles() {
+  const canvasRef = useRef(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const context = canvas?.getContext("2d");
+    if (!canvas || !context) return;
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const pointer = { x: -1000, y: -1000 };
+    let width = 0;
+    let height = 0;
+    let frame = 0;
+    let particles = [];
+
+    const resize = () => {
+      const ratio = Math.min(window.devicePixelRatio || 1, 2);
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = Math.round(width * ratio);
+      canvas.height = Math.round(height * ratio);
+      context.setTransform(ratio, 0, 0, ratio, 0, 0);
+      const count = Math.max(45, Math.min(120, Math.round((width * height) / 8500)));
+      particles = Array.from({ length: count }, () => ({
+        x: Math.random() * width, y: Math.random() * height,
+        vx: (Math.random() - 0.5) * 0.42, vy: (Math.random() - 0.5) * 0.42,
+        radius: 0.8 + Math.random() * 1.5, phase: Math.random() * Math.PI * 2,
+      }));
+      if (reducedMotion.matches) draw();
+    };
+    const onPointerMove = (event) => { pointer.x = event.clientX; pointer.y = event.clientY; };
+    const onPointerLeave = () => { pointer.x = -1000; pointer.y = -1000; };
+
+    const draw = (time = 0) => {
+      context.clearRect(0, 0, width, height);
+      particles.forEach((particle) => {
+        const dx = particle.x - pointer.x;
+        const dy = particle.y - pointer.y;
+        const distance = Math.hypot(dx, dy);
+        const near = Math.max(0, 1 - distance / 125);
+        if (!reducedMotion.matches) {
+          particle.vx += (Math.random() - 0.5) * 0.018;
+          particle.vy += (Math.random() - 0.5) * 0.018;
+          if (near > 0) {
+            const force = near * 0.055;
+            particle.vx += (dx / (distance || 1)) * force;
+            particle.vy += (dy / (distance || 1)) * force;
+          }
+          particle.vx *= 0.992;
+          particle.vy *= 0.992;
+          particle.x = (particle.x + particle.vx + width) % width;
+          particle.y = (particle.y + particle.vy + height) % height;
+        }
+        const pulse = 0.65 + Math.sin(time * 0.0015 + particle.phase) * 0.2;
+        const alpha = Math.min(1, pulse + near * 0.35);
+        context.beginPath();
+        context.arc(particle.x, particle.y, particle.radius + near * 2.1, 0, Math.PI * 2);
+        context.fillStyle = near > 0.05 ? `rgba(84,213,255,${alpha})` : `rgba(38,144,255,${alpha})`;
+        context.shadowColor = near > 0.05 ? "#42cfff" : "#147eff";
+        context.shadowBlur = 5 + near * 19;
+        context.fill();
+      });
+      context.shadowBlur = 0;
+      if (!reducedMotion.matches) frame = window.requestAnimationFrame(draw);
+    };
+
+    resize();
+    if (!reducedMotion.matches) frame = window.requestAnimationFrame(draw);
+    window.addEventListener("resize", resize, { passive: true });
+    window.addEventListener("pointermove", onPointerMove, { passive: true });
+    window.addEventListener("pointerleave", onPointerLeave);
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.removeEventListener("resize", resize);
+      window.removeEventListener("pointermove", onPointerMove);
+      window.removeEventListener("pointerleave", onPointerLeave);
+    };
+  }, []);
+
+  return <canvas ref={canvasRef} className="site-particles" aria-hidden="true" />;
+}
+
 function HeroVisual() {
+  useEffect(() => {
+    const cards = document.querySelectorAll(".hero-art .random-rock");
+    cards.forEach((card) => {
+      const left = 3 + Math.random() * 2;
+      const right = 3 + Math.random() * 2;
+      const duration = 5 + Math.random() * 4;
+      const delay = Math.random() * -duration;
+      card.style.setProperty("--rock-left", `${-left}deg`);
+      card.style.setProperty("--rock-right", `${right}deg`);
+      card.style.setProperty("--rock-duration", `${duration}s`);
+      card.style.setProperty("--rock-delay", `${delay}s`);
+    });
+  }, []);
+
   return (
     <div className="hero-art reveal reveal-right" aria-label="A visual map of the Seyqon development approach">
-      <div className="art-grid" aria-hidden="true" /><div className="orbit orbit-one" aria-hidden="true" /><div className="orbit orbit-two" aria-hidden="true" />
+      <div className="art-grid" aria-hidden="true" />
+  <div className="hero-hollow" aria-hidden="true"><span className="hollow-glint" /></div><div className="orbit orbit-one" aria-hidden="true" /><div className="orbit orbit-two" aria-hidden="true" />
       <div className="art-caption"><span>IDEA TO IMPLEMENTATION</span><span>01 / 04</span></div>
-      <div className="solution-board glass-panel">
+      <div className="solution-board glass-panel random-rock">
         <div className="board-top"><span className="board-kicker">A clearer path forward</span><span className="board-index">S / 01</span></div>
         <div className="board-title">Make the idea<br /><em>work for you.</em></div>
         <div className="board-flow">
@@ -101,8 +197,8 @@ function HeroVisual() {
         </div>
         <div className="board-foot"><span className="signal"><i />Built around your brief</span><span>SEYQON / STUDIO</span></div>
       </div>
-      <div className="floating-chip chip-blue"><span className="chip-glyph">&#123; &#125;</span><span><b>Built to fit</b><small>Your requirements first</small></span></div>
-      <div className="floating-chip chip-price"><span className="price-currency">₹</span><span><b>From ₹1,000</b><small>College projects</small></span></div>
+      <div className="floating-chip chip-blue random-rock"><span className="chip-glyph">&#123; &#125;</span><span><b>Built to fit</b><small>Your requirements first</small></span></div>
+      <div className="floating-chip chip-price random-rock"><span className="price-currency">₹</span><span><b>From ₹1,000</b><small>College projects</small></span></div>
       <div className="art-side-label">PRACTICAL BY DESIGN</div>
     </div>
   );
@@ -313,7 +409,7 @@ function App() {
   const toggleTheme = () => setThemeMode(theme === "dark" ? "light" : "dark");
   const useSystemTheme = () => setThemeMode("system");
 
-  return <><a className="skip-link" href="#main">Skip to content</a><Header theme={theme} themeMode={themeMode} onToggleTheme={toggleTheme} onUseSystemTheme={useSystemTheme} /><main id="main"><Hero /><section className="intro-band section-wrap reveal mx-auto grid w-full max-w-[1200px]" aria-label="Company introduction"><p>Small beginnings.<br /><strong>Useful technology.</strong></p><p className="intro-text">From academic prototypes to business tools, good software starts with listening. We shape the scope, choose a sensible approach, and build toward a result you can use and understand.</p><div className="intro-stamp" aria-hidden="true"><span>IDEA</span><b>→</b><span>IMPACT</span></div></section><Services /><Approach /><About /><Work /><Contact /></main><Footer /></>;
+  return <><HeroParticles /><div className="site-content"><a className="skip-link" href="#main">Skip to content</a><Header theme={theme} themeMode={themeMode} onToggleTheme={toggleTheme} onUseSystemTheme={useSystemTheme} /><main id="main"><Hero /><section className="intro-band section-wrap reveal mx-auto grid w-full max-w-[1200px]" aria-label="Company introduction"><p>Small beginnings.<br /><strong>Useful technology.</strong></p><p className="intro-text">From academic prototypes to business tools, good software starts with listening. We shape the scope, choose a sensible approach, and build toward a result you can use and understand.</p><div className="intro-stamp" aria-hidden="true"><span>IDEA</span><b>→</b><span>IMPACT</span></div></section><Services /><Approach /><About /><Work /><Contact /></main><Footer /></div></>;
 }
 
 export default App;

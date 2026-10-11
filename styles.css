@@ -526,3 +526,29 @@ h1, h2, h3 { font-family: var(--font-display); }
   .field-wide { grid-column: auto; }
   .footer-bottom { justify-content: flex-start; }
 }
+
+/* Shared four-step type scale: display, heading, body, and supporting text. */
+:root {
+  --type-display: clamp(2.25rem, calc(5vw + 1rem), 4.75rem);
+  --type-heading: clamp(2rem, calc(3.2vw + .5rem), 3.25rem);
+  --type-body: 1rem;
+  --type-small: .75rem;
+}
+
+body { font-size: var(--type-body); }
+.hero h1 { font-size: var(--type-display); }
+.section-heading h2, .approach h2, .about h2, .work h2, .contact h2 { font-size: var(--type-heading); }
+.board-title, .price-display strong { font-size: var(--type-heading); }
+.service-tile h3, .process-step h3, .form-heading h3 { font-size: var(--type-body); }
+.hero-lede, .intro-text, .section-heading > p, .approach-heading > p:not(.eyebrow), .about-copy > p:not(.eyebrow), .contact-intro > p:not(.eyebrow), .work-copy > p:not(.eyebrow) { font-size: var(--type-body); }
+.eyebrow, .primary-nav, .theme-toggle, .theme-reset, .button, .text-link, .hero-note, .board-kicker, .board-index, .flow-node, .board-foot, .floating-chip b, .floating-chip small, .chip-glyph, .price-currency, .art-caption, .art-side-label, .hero-scroll, .intro-stamp, .tile-index, .tile-arrow, .service-tile p, .tile-link, .schematic-node, .price-display small, .price-display i, .layer-front b, .specialist-core, .specialist-core small, .specialist-tag, .service-footnote, .process-number, .process-step p, .process-mark, .about-mark > span, .value-list span, .diagram-node, .contact-aside, .form-overline, .form-required, .field, .field small, .field input, .field select, .field textarea, .form-submit p, .form-status, .footer-main > p, .footer-up, .footer-bottom { font-size: var(--type-small); }
+.nav-cta span, .button span, .text-link span, .tile-link span, .footer-up span, .intro-stamp b { font-size: var(--type-small); }
+
+@media (max-width: 520px) {
+  .hero h1 { font-size: var(--type-display); }
+  .section-heading h2, .approach h2, .about h2, .work h2, .contact h2 { font-size: var(--type-heading); }
+}
+/* Align form controls and decorative wordmarks to the same four scale roles. */
+.field input, .field select, .field textarea { font-size: var(--type-body); }
+.flow-symbol, .price-display strong span, .nav-cta span, .button span, .text-link span, .tile-link span, .footer-up span, .intro-stamp b { font-size: var(--type-small); }
+.schematic-core, .phone-mark, .diagram-center { font-size: var(--type-body); }
