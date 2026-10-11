@@ -60,8 +60,8 @@ function Header({ theme, themeMode, onToggleTheme, onUseSystemTheme }) {
   }, []);
 
   return (
-    <header className="site-header z-20 w-full px-4 sm:px-8">
-      <div className="nav-shell mx-auto flex w-full max-w-[1290px] items-center justify-between">
+    <header className="site-header z-20">
+      <div className="nav-shell mx-auto flex max-w-[1290px] items-center justify-between">
         <a className="brand" href="#home" aria-label="Seyqon Tech Solutions home">
           <img src="/assets/seyqon-logo-horizontal.png" alt="Seyqon Tech Solutions" />
         </a>
@@ -413,3 +413,5 @@ function App() {
 }
 
 export default App;
+
+

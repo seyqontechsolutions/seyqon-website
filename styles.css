@@ -552,3 +552,115 @@ body { font-size: var(--type-body); }
 .field input, .field select, .field textarea { font-size: var(--type-body); }
 .flow-symbol, .price-display strong span, .nav-cta span, .button span, .text-link span, .tile-link span, .footer-up span, .intro-stamp b { font-size: var(--type-small); }
 .schematic-core, .phone-mark, .diagram-center { font-size: var(--type-body); }
+
+
+/* Responsive layout refinements for tablet and mobile screens. */
+@media (max-width: 860px) {
+  .hero { grid-template-columns: 1fr; min-height: 0; padding-top: 118px; }
+  .hero-copy { max-width: 720px; padding-bottom: 0; }
+  .hero-art { width: min(680px, 100%); margin-inline: auto; transform: none; }
+}
+
+@media (max-width: 720px) {
+  html { scroll-padding-top: 78px; }
+  .section-wrap { width: min(100% - 36px, var(--content)); }
+  .section-space { padding-block: clamp(58px, 11vw, 78px); }
+  .hero { gap: 14px; padding-top: 106px; padding-bottom: 42px; }
+  .hero h1 { font-size: clamp(2.5rem, 10vw, 4.25rem); line-height: 1.02; }
+  .hero-lede { margin-top: 18px; font-size: 1rem; line-height: 1.65; }
+  .hero-actions { gap: 14px 20px; margin-top: 22px; }
+  .hero-note { margin-top: 25px; }
+  .hero-art { height: clamp(320px, 90vw, 410px); margin-top: 8px; }
+  .solution-board { width: min(390px, calc(100% - 30px)); padding: clamp(17px, 5vw, 23px); }
+  .board-title { margin-top: 18px; font-size: clamp(1.55rem, 7vw, 2rem); }
+  .board-flow { margin-top: 18px; padding-block: 12px; }
+  .flow-connector { margin-inline: 5px; }
+  .chip-blue { top: 24px; right: 0; }
+  .chip-price { bottom: 18px; left: 0; }
+  .floating-chip { max-width: min(205px, 56%); padding: 9px 11px; }
+  .art-caption { right: 0; left: 0; font-size: 10px; }
+  .art-side-label { display: none; }
+  .intro-band { grid-template-columns: 1fr; gap: 12px; padding-block: 27px; }
+  .intro-band > p:first-child { font-size: 20px; }
+  .intro-text { font-size: 1rem; line-height: 1.65; }
+  .section-heading { display: block; margin-bottom: 28px; }
+  .section-heading > p { margin-top: 14px; font-size: 1rem; }
+  .section-heading h2, .approach h2, .about h2, .work h2, .contact h2 { font-size: clamp(2rem, 8vw, 3rem); }
+  .service-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: none; grid-auto-rows: minmax(285px, auto); gap: 12px; }
+  .service-tile { min-width: 0; padding: 18px 16px; }
+  .service-tile h3 { font-size: 1rem; }
+  .service-tile p { font-size: .875rem; line-height: 1.55; }
+  .tile-link { font-size: .8rem; }
+  .tile-index, .tile-arrow { font-size: .7rem; }
+  .tile-feature { grid-column: 1 / -1; grid-row: auto; }
+  .tile-feature .tile-visual { height: clamp(150px, 34vw, 190px); margin: 18px 0 14px; }
+  .approach-wrap { grid-template-columns: 1fr; gap: 36px; }
+  .approach-heading > p:not(.eyebrow) { max-width: 54ch; font-size: 1rem; }
+  .process-step { grid-template-columns: 34px minmax(0, 1fr) 18px; gap: 11px; padding: 18px 0; }
+  .process-step h3 { font-size: 1rem; }
+  .process-step p { font-size: .875rem; }
+  .about { grid-template-columns: 1fr; gap: 28px; }
+  .about-copy { order: 1; }
+  .about-copy > p:not(.eyebrow) { font-size: 1rem; }
+  .about-copy .about-lede { font-size: 1.125rem !important; }
+  .about-mark { min-height: clamp(240px, 68vw, 310px); order: 2; }
+  .about-mark img { width: min(170px, 48vw); }
+  .value-list { gap: 8px; }
+  .value-list span { padding: 8px 10px; font-size: .8rem; }
+  .work { padding-top: 0; }
+  .work-panel { grid-template-columns: 1fr; gap: 10px; padding: clamp(22px, 6vw, 34px); }
+  .work-copy > p:not(.eyebrow) { font-size: 1rem; }
+  .work-diagram { width: min(320px, 100%); height: 210px; justify-self: center; margin: 0 auto -6px; transform: none; }
+  .diagram-line { left: 8%; width: 84%; }
+  .diagram-center { left: calc(50% - 32px); }
+  .contact { grid-template-columns: 1fr; gap: 28px; padding-top: 0; padding-bottom: 64px; }
+  .contact-intro > p:not(.eyebrow) { margin-top: 16px; font-size: 1rem; }
+  .contact-aside { margin-top: 20px; font-size: .875rem; }
+  .enquiry-form { min-width: 0; padding: clamp(18px, 5vw, 26px); }
+  .form-heading { gap: 10px; }
+  .form-heading h3 { font-size: 1.125rem; }
+  .field { font-size: .875rem; }
+  .field input, .field select, .field textarea { min-height: 48px; padding-inline: 12px; font-size: 16px; }
+  .field textarea { min-height: 110px; }
+  .form-submit { align-items: stretch; flex-direction: column; gap: 12px; }
+  .form-submit .button { width: 100%; }
+  .form-submit p { max-width: none; font-size: .8rem; }
+  .footer-main { grid-template-columns: minmax(0, 1fr) auto; gap: 8px; min-height: 104px; padding-block: 16px; }
+  .footer-brand { width: min(165px, 46vw); }
+  .footer-main > p { grid-column: 1; grid-row: 2; margin: 0; text-align: left; font-size: .8rem; }
+  .footer-up { grid-column: 2; grid-row: 1 / span 2; }
+  .footer-bottom { flex-wrap: wrap; justify-content: flex-start; gap: 9px 16px; padding-block: 14px; font-size: .75rem; }
+}
+
+@media (max-width: 600px) {
+  .service-grid { grid-template-columns: minmax(0, 1fr); grid-auto-rows: auto; }
+  .tile-feature, .tile-mobile, .tile-student, .tile-custom, .tile-specialist { grid-column: auto; grid-row: auto; min-height: 260px; }
+  .tile-feature { min-height: 330px; }
+  .tile-feature .tile-visual { height: clamp(150px, 48vw, 190px); }
+  .tile-mobile .tile-visual { height: 150px; }
+  .chip-blue { right: 0; }
+  .chip-price { left: 0; }
+}
+
+@media (max-width: 390px) {
+  .section-wrap { width: calc(100% - 30px); }
+  .site-header { padding-inline: 10px; }
+  .primary-nav { right: 0; left: 0; }
+  .hero { padding-top: 98px; }
+  .hero h1 { font-size: clamp(2.25rem, 11vw, 2.75rem); }
+  .hero-actions { align-items: flex-start; flex-direction: column; gap: 12px; }
+  .hero-actions .button { width: 100%; }
+  .hero-art { height: 320px; }
+  .solution-board { width: calc(100% - 24px); padding: 15px 13px; }
+  .board-title { font-size: clamp(1.4rem, 7vw, 1.75rem); }
+  .board-kicker, .board-index { font-size: .625rem; }
+  .board-foot { align-items: flex-start; gap: 8px; font-size: .625rem; }
+  .floating-chip { max-width: 58%; gap: 7px; padding: 8px; }
+  .floating-chip b, .floating-chip small { font-size: .6875rem; }
+  .chip-glyph, .price-currency { width: 25px; height: 25px; flex: 0 0 25px; }
+  .art-caption { font-size: .625rem; letter-spacing: .1em; }
+  .form-heading { flex-direction: column; }
+  .form-required { padding-top: 0; }
+  .work-diagram { height: 190px; }
+  .diagram-node { width: 62px; }
+}
