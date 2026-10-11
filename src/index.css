@@ -38,10 +38,10 @@
 
 /* RESPONSIVE SIDE GUTTERS — these px values control equal left/right spacing. */
 .site-content .section-wrap { width: min(1200px, calc(100% - 64px)); margin-inline: auto; }
-.site-header { position: fixed; top: 18px; right: auto; left: 0; width: 100%; box-sizing: border-box; z-index: 20; }
+.site-header { position: fixed; top: 18px; right: 32px; left: 32px; width: auto; padding: 0; box-sizing: border-box; z-index: 20; }
 @media (max-width: 1000px) {
   .site-content .section-wrap { width: calc(100% - 48px); }
-  .site-header { padding-inline: 24px; }
+  .site-header { right: 24px; left: 24px; padding: 0; }
 }
 @media (max-width: 860px) {
   .site-header .nav-shell { width: 100%; min-width: 0; box-sizing: border-box; gap: 10px; }
@@ -50,9 +50,9 @@
 }
 @media (max-width: 720px) {
   .site-content .section-wrap { width: calc(100% - 32px); }
-  .site-header { top: 10px; padding-inline: 16px; }
+  .site-header { top: 10px; right: 16px; left: 16px; padding: 0; }
 }
 @media (max-width: 390px) {
   .site-content .section-wrap { width: calc(100% - 28px); }
-  .site-header { padding-inline: 14px; }
+  .site-header { right: 14px; left: 14px; padding: 0; }
 }
