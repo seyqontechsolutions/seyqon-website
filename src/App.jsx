@@ -1,6 +1,10 @@
 import { useEffect, useRef, useState } from "react";
+import emailjs from "@emailjs/browser";
+import { createPortal } from "react-dom";
 
-const ENQUIRY_ENDPOINT = ""; // Set a POST endpoint when the enquiry service is ready.
+const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
 
 const services = [
   {
@@ -297,6 +301,22 @@ function Work() {
 function ContactForm() {
   const [status, setStatus] = useState({ text: "", error: false });
   const [sending, setSending] = useState(false);
+  const [successOpen, setSuccessOpen] = useState(false);
+  const continueButtonRef = useRef(null);
+
+  useEffect(() => {
+    if (!successOpen) return;
+    const previouslyFocused = document.activeElement;
+    continueButtonRef.current?.focus();
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") setSuccessOpen(false);
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      previouslyFocused?.focus?.();
+    };
+  }, [successOpen]);
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -307,23 +327,22 @@ function ContactForm() {
       invalidField.focus();
       return;
     }
-    if (!ENQUIRY_ENDPOINT) {
-      setStatus({ text: "Your project outline is complete. This page is a local demo, so it has not been sent or stored. Connect an enquiry endpoint before launch to receive submissions.", error: false });
+
+    if (!EMAILJS_SERVICE_ID || !EMAILJS_TEMPLATE_ID || !EMAILJS_PUBLIC_KEY) {
+      setStatus({ text: "Email delivery is not configured yet. Add the EmailJS values to .env.local and restart the dev server.", error: true });
       return;
     }
 
     setSending(true);
     setStatus({ text: "Sending your enquiry…", error: false });
     try {
-      const response = await fetch(ENQUIRY_ENDPOINT, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(Object.fromEntries(new FormData(form).entries())),
-      });
-      if (!response.ok) throw new Error("Enquiry submission failed");
-      setStatus({ text: "Thanks. Your enquiry was sent successfully. We’ll review the details and follow up using the contact information you provided.", error: false });
+      const templateParams = Object.fromEntries(new FormData(form).entries());
+      await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams, { publicKey: EMAILJS_PUBLIC_KEY });
+      setStatus({ text: "", error: false });
+      setSuccessOpen(true);
       form.reset();
-    } catch {
+    } catch (error) {
+      console.error("EmailJS enquiry error:", error);
       setStatus({ text: "We couldn’t send your enquiry just now. Your details are still in this form; please try again later.", error: true });
     } finally {
       setSending(false);
@@ -331,7 +350,25 @@ function ContactForm() {
   }
 
   return (
-    <form className="enquiry-form glass-panel reveal" onSubmit={handleSubmit} noValidate>
+    <>
+      {successOpen && createPortal(
+        <div className="success-overlay" onMouseDown={(event) => { if (event.target === event.currentTarget) setSuccessOpen(false); }}>
+          <section className="success-dialog" role="dialog" aria-modal="true" aria-labelledby="success-title" aria-describedby="success-description">
+            <div className="success-confetti" aria-hidden="true">
+              {Array.from({ length: 20 }, (_, index) => (
+                <span key={index} style={{ "--confetti-x": `${(index - 10) * 13}px`, "--confetti-delay": `${(index % 7) * -0.21}s`, "--confetti-rotation": `${index * 47}deg` }} />
+              ))}
+            </div>
+            <div className="success-check" aria-hidden="true"><svg viewBox="0 0 48 48"><path d="m13 24 7.5 7.5L35 17" /></svg></div>
+            <p className="success-kicker">MESSAGE DELIVERED</p>
+            <h2 id="success-title">Your enquiry has<br /><span>sent successfully.</span></h2>
+            <p id="success-description">Thanks for sharing your idea. Our team will review your details and follow up soon.</p>
+            <button ref={continueButtonRef} className="button button-primary success-continue" type="button" onClick={() => setSuccessOpen(false)}>Continue to explore <span aria-hidden="true">↗</span></button>
+          </section>
+        </div>,
+        document.body
+      )}
+      <form className="enquiry-form glass-panel reveal" onSubmit={handleSubmit} noValidate>
       <div className="form-heading"><div><span className="form-overline">PROJECT ENQUIRY</span><h3>Let’s get the brief started.</h3></div><span className="form-required">* Required</span></div>
       <div className="form-grid grid md:grid-cols-2">
         <label className="field"><span>Your name <i>*</i></span><input name="name" autoComplete="name" required placeholder="Name" /></label>
@@ -342,9 +379,10 @@ function ContactForm() {
         <label className="field"><span>Budget range</span><select name="budget" defaultValue=""><option value="">Choose a range</option><option>Under ₹5,000</option><option>₹5,000–₹15,000</option><option>₹15,000–₹50,000</option><option>₹50,000+</option><option>Need guidance</option></select></label>
         <label className="field"><span>Reference link <small>Optional</small></span><input name="reference" type="url" placeholder="https://" /></label>
       </div>
-      <div className="form-submit"><button className="button button-primary inline-flex items-center" type="submit" disabled={sending}>{sending ? "Sending…" : <>Review enquiry <span aria-hidden="true">↗</span></>}</button><p>This form currently runs as a local demo. It does not send or store your details.</p></div>
+      <div className="form-submit"><button className="button button-primary inline-flex items-center" type="submit" disabled={sending}>{sending ? "Sending…" : <>Review enquiry <span aria-hidden="true">↗</span></>}</button><p>Your enquiry is sent securely through our email service.</p></div>
       <div className={`form-status ${status.text ? "is-visible" : ""} ${status.error ? "is-error" : ""}`} role="status" aria-live="polite">{status.text}</div>
-    </form>
+      </form>
+    </>
   );
 }
 
@@ -413,5 +451,8 @@ function App() {
 }
 
 export default App;
+
+
+
 
 

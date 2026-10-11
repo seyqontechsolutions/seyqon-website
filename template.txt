@@ -1,0 +1,42 @@
+EMAILJS PROJECT ENQUIRY TEMPLATE
+
+Suggested template settings
+---------------------------
+To email: your business inbox
+From name: {{name}}
+Reply-to: {{contact}}
+Subject: New project enquiry — {{category}}
+
+Email body (HTML)
+-----------------
+Paste the following into the EmailJS template content (HTML mode):
+
+<div style="font-family: system-ui, sans-serif, Arial; font-size: 12px">
+  <div>A project enquiry from {{name}} has been received. Kindly respond at your earliest convenience.</div>
+  <div style="margin-top: 20px; padding: 15px 0; border-width: 1px 0; border-style: dashed; border-color: lightgrey">
+    <table role="presentation">
+      <tr>
+        <td style="vertical-align: top">
+          <div style="padding: 6px 10px; margin: 0 10px; background-color: aliceblue; border-radius: 5px; font-size: 26px" role="img">👤</div>
+        </td>
+        <td style="vertical-align: top">
+          <div style="color: #2c3e50; font-size: 16px"><strong>{{name}}</strong></div>
+          <div style="color: #cccccc; font-size: 13px">{{contact}}</div>
+          <p style="font-size: 16px">{{description}}</p>
+          <p><strong>Category:</strong> {{category}}<br>
+          <strong>Expected timeline:</strong> {{timeline}}<br>
+          <strong>Budget range:</strong> {{budget}}<br>
+          <strong>Reference link:</strong> {{reference}}</p>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div>Sent from the Seyqon Tech Solutions website enquiry form.</div>
+</div>
+
+EmailJS notes
+-------------
+- The template variables match the enquiry form fields in src/App.jsx.
+- The original {{time}} and {{message}} placeholders were mapped to {{contact}} and {{description}} because those are the corresponding form fields.
+- The contact field accepts either an email address or phone number. Use {{contact}} as Reply-To only when the visitor enters an email address, or change the form to collect email and phone separately.
+- Use a verified address from your connected email service as the From Email; do not use {{contact}} as the sender.
