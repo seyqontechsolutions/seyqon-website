@@ -59,13 +59,20 @@ function Header({ theme, themeMode, onToggleTheme, onUseSystemTheme }) {
 
   useEffect(() => {
     const onKeyDown = (event) => event.key === "Escape" && closeMenu();
+    const onResize = () => {
+      if (window.matchMedia("(min-width: 1001px)").matches) closeMenu();
+    };
     window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
+    window.addEventListener("resize", onResize);
+    return () => {
+      window.removeEventListener("keydown", onKeyDown);
+      window.removeEventListener("resize", onResize);
+    };
   }, []);
 
   return (
     <header className="site-header z-20">
-      <div className="nav-shell mx-auto flex max-w-[1290px] items-center justify-between">
+      <div className="nav-shell mx-auto flex max-w-[1200px] items-center justify-between">
         <a className="brand" href="#home" aria-label="Seyqon Tech Solutions home">
           <img src="/assets/seyqon-logo-horizontal.png" alt="Seyqon Tech Solutions" />
         </a>
